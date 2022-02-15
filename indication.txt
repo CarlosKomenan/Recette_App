@@ -1,0 +1,4 @@
+Pour faire apparaitre le code SHA-1
+->Aller dans android>gradle>gradlew
+->Puis ouvrir gradlew dans le terminal intégré 
+->Exécuter: ./gradlew signingReport
