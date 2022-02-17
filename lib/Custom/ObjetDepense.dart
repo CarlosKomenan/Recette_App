@@ -20,6 +20,12 @@ class _ObjetDState extends State<ObjetD> {
     {"nom": "Lait", "icon": "assets/lait.jpg"},
     {"nom": "Autres produits", "icon": "assets/autre.jpg"},
   ];
+
+  // Widget buildObjet(ObjetDepense objetDepense) => ListTile(
+  //       leading: Text(objetDepense.iconObjet.toString()),
+  //       title: Text(objetDepense.nomObjet.toString()),
+  //     );
+
   @override
   Widget build(BuildContext context) {
     return GridView.builder(

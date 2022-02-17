@@ -12,7 +12,7 @@ import 'package:recette_app/pages/HomePage.dart';
 import 'package:recette_app/pages/MenuPage.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:recette_app/pages/model/user_model.dart';
+import 'package:recette_app/model/user_model.dart';
 
 class AddTodoD extends StatefulWidget {
   const AddTodoD({Key? key}) : super(key: key);
@@ -154,8 +154,6 @@ class _AddTodoDState extends State<AddTodoD> {
           )),
     );
   }
-
-  
 
   Widget textDate() {
     return Container(

@@ -54,6 +54,7 @@ dependencies:
   bottom_navy_bar: ^6.0.0
   curved_navigation_bar: ^1.0.2
   flutter_spinkit: ^5.1.0
+  useful_widgets: ^1.2.0
 
   
 dev_dependencies:
@@ -112,6 +113,7 @@ flutter:
     - assets/huile.jpg
     - assets/lait.jpg
     - assets/autre.jpg 
+    - assets/admin.png
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
 

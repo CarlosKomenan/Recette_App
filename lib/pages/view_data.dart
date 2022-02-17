@@ -36,8 +36,8 @@ class _ViewDataState extends State<ViewData> {
           id: '',
         ));
     // Affichage du nom
-    print(widget.document['Nom']);
-    print(widget.document['Date']);
+    // print(widget.document['Nom']);
+    // print(widget.document['Date']);
     // String nom = widget.document["Nom"] ?? " Non disponible";
     // _nomController = TextEditingController(text: nom);
     // Affichage de la date

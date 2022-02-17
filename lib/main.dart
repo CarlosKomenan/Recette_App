@@ -8,6 +8,7 @@ import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:recette_app/Service/Auth_service.dart';
 import 'package:recette_app/pages/Home.dart';
 import 'package:recette_app/pages/MenuPage.dart';
+import 'package:recette_app/pages/ObjetsDepenses/list_objets.dart';
 import 'package:recette_app/pages/PhoneAuthPage.dart';
 import 'package:recette_app/pages/SignIn.dart';
 import 'package:recette_app/pages/SignUpPage.dart';

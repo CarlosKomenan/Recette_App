@@ -1,4 +1,4 @@
-// ignore_for_file: file_names, unused_import, prefer_const_constructors, sized_box_for_whitespace, prefer_final_fields, prefer_const_literals_to_create_immutables, unused_local_variable, deprecated_member_use, avoid_unnecessary_containers, avoid_print, unnecessary_this
+// ignore_for_file: file_names, unused_import, prefer_const_constructors, sized_box_for_whitespace, prefer_final_fields, prefer_const_literals_to_create_immutables, unused_local_variable, deprecated_member_use, avoid_unnecessary_containers, avoid_print, unnecessary_this, non_constant_identifier_names
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -10,6 +10,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:recette_app/Service/Auth_Service.dart';
+import 'package:recette_app/model/domaine_model.dart';
 import 'package:recette_app/pages/DetailsPage.dart';
 import 'package:recette_app/pages/Enregistrements/transition.dart';
 import 'package:recette_app/pages/SignIn.dart';
@@ -18,7 +19,7 @@ import 'dart:ui' as ui;
 import 'HomePage.dart';
 import 'ObjetsDepenses/list_objets.dart';
 import 'SignUpPage.dart';
-import 'model/user_model.dart';
+import 'package:recette_app/model/user_model.dart';
 
 class MenuPage extends StatefulWidget {
   const MenuPage({Key? key}) : super(key: key);
@@ -32,12 +33,14 @@ class _MenuPageState extends State<MenuPage> {
   AuthClass authClass = AuthClass();
   User? user = FirebaseAuth.instance.currentUser;
   UserModel loggedInUser = UserModel();
+  DomaineModel domaineModel = DomaineModel();
+  String photo_defaut = "assets/admin.png";
 
   @override
   void initState() {
     super.initState();
     FirebaseFirestore.instance
-        .collection("users")
+        .collection("Utilisateur")
         .doc(user!.uid)
         .get()
         .then((value) {
@@ -117,8 +120,7 @@ class _MenuPageState extends State<MenuPage> {
                                     radius: 35,
                                     backgroundColor: Colors.blueAccent[700],
                                     child: CircleAvatar(
-                                      backgroundImage:
-                                          AssetImage("assets/she.png"),
+                                      backgroundImage: AssetImage(photo_defaut),
                                       radius: 30,
                                     ),
                                   ),
@@ -141,7 +143,7 @@ class _MenuPageState extends State<MenuPage> {
                                       width: 4,
                                     ),
                                     Text(
-                                      "${loggedInUser.firstName} ${loggedInUser.secondName}",
+                                      "${loggedInUser.Nom} ${loggedInUser.Prenom}",
                                       style: TextStyle(
                                           color: Colors.black,
                                           fontSize: 18,
@@ -155,7 +157,7 @@ class _MenuPageState extends State<MenuPage> {
                                 Row(
                                   children: [
                                     Text(
-                                      "${loggedInUser.email}",
+                                      "${loggedInUser.Email}",
                                       style: TextStyle(
                                           color: Colors.black,
                                           fontWeight: FontWeight.w500),
@@ -168,7 +170,7 @@ class _MenuPageState extends State<MenuPage> {
                                 Row(
                                   children: [
                                     Text(
-                                      "${loggedInUser.numeroTel}",
+                                      "${loggedInUser.Contact}",
                                       style: TextStyle(
                                           color: Colors.black,
                                           fontWeight: FontWeight.w500),

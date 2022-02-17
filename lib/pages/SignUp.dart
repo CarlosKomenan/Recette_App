@@ -5,8 +5,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:recette_app/constant.dart';
+import 'package:recette_app/model/domaine_model.dart';
 import 'package:recette_app/pages/MenuPage.dart';
-import 'package:recette_app/pages/model/user_model.dart';
+import 'package:recette_app/model/user_model.dart';
 
 import 'SignIn.dart';
 
@@ -24,12 +25,14 @@ class _SignUpState extends State<SignUp> {
   final _formKey = GlobalKey<FormState>();
 
   //Editing controller
-  final firstNameEditingController = TextEditingController();
-  final secondNameEditingController = TextEditingController();
+  final NomEditingController = TextEditingController();
+  final PrenomEditingController = TextEditingController();
   final emailEditingController = TextEditingController();
-  final numeroTelEditingController = TextEditingController();
+  final ContactEditingController = TextEditingController();
   final passwordEditingController = TextEditingController();
   final confirmPasswordEditingController = TextEditingController();
+  final nomEntrepriseEditingController = TextEditingController();
+  final PhotoEditingController = TextEditingController();
   bool loading = false;
 
   void Enregistrer(String email, String password, BuildContext context) async {
@@ -56,15 +59,19 @@ class _SignUpState extends State<SignUp> {
     FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
     User? user = _auth.currentUser;
     UserModel userModel = UserModel();
+    DomaineModel domaineModel = DomaineModel();
 
-    userModel.email = user!.email;
+    userModel.Email = user!.email;
     userModel.uid = user.uid;
-    userModel.firstName = firstNameEditingController.text;
-    userModel.secondName = secondNameEditingController.text;
-    userModel.numeroTel = numeroTelEditingController.text;
+    userModel.Nom = NomEditingController.text;
+    userModel.Prenom = PrenomEditingController.text;
+    userModel.Contact = ContactEditingController.text;
+    userModel.Photo = "NONE";
+    userModel.Nom_entreprise = "NONE";
+    userModel.Id_domaine = domaineModel.Id_domaine;
 
     await firebaseFirestore
-        .collection("users")
+        .collection("Utilisateur")
         .doc(user.uid)
         .set(userModel.toMap());
     Fluttertoast.showToast(msg: "Compte créer avec succès");
@@ -132,7 +139,7 @@ class _SignUpState extends State<SignUp> {
                         autofocus: false,
                         keyboardType: TextInputType.text,
                         textInputAction: TextInputAction.next,
-                        controller: firstNameEditingController,
+                        controller: NomEditingController,
                         validator: (value) {
                           //champ vide
                           if (value!.isEmpty) {
@@ -141,7 +148,7 @@ class _SignUpState extends State<SignUp> {
                           return null;
                         },
                         onSaved: (value) {
-                          firstNameEditingController.text = value!;
+                          NomEditingController.text = value!;
                         },
                         decoration: InputDecoration(
                           contentPadding: EdgeInsets.all(8),
@@ -164,7 +171,7 @@ class _SignUpState extends State<SignUp> {
                         autofocus: false,
                         keyboardType: TextInputType.text,
                         textInputAction: TextInputAction.next,
-                        controller: secondNameEditingController,
+                        controller: PrenomEditingController,
                         validator: (value) {
                           //champ vide
                           if (value!.isEmpty) {
@@ -173,12 +180,44 @@ class _SignUpState extends State<SignUp> {
                           return null;
                         },
                         onSaved: (value) {
-                          secondNameEditingController.text = value!;
+                          PrenomEditingController.text = value!;
                         },
                         decoration: InputDecoration(
                           contentPadding: EdgeInsets.all(8),
                           prefixIcon: Icon(Icons.account_circle_outlined),
                           hintText: "Entrer votre prenom",
+                          hintStyle: kHintStyle,
+                          fillColor: Colors.grey[200],
+                          filled: true,
+                          enabledBorder: kOutlineBorder,
+                          focusedBorder: kOutlineBorder,
+                          errorBorder: kOutlineErrorBorder,
+                          focusedErrorBorder: kOutlineErrorBorder,
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 15),
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.9,
+                      child: TextFormField(
+                        autofocus: false,
+                        keyboardType: TextInputType.text,
+                        textInputAction: TextInputAction.next,
+                        controller: nomEntrepriseEditingController,
+                        validator: (value) {
+                          //champ vide
+                          if (value!.isEmpty) {
+                            return "Veuillez renseigner ce champ svp";
+                          }
+                          return null;
+                        },
+                        onSaved: (value) {
+                          nomEntrepriseEditingController.text = value!;
+                        },
+                        decoration: InputDecoration(
+                          contentPadding: EdgeInsets.all(8),
+                          prefixIcon: Icon(Icons.business),
+                          hintText: "Entrer le nom de votre entreprise",
                           hintStyle: kHintStyle,
                           fillColor: Colors.grey[200],
                           filled: true,
@@ -233,7 +272,7 @@ class _SignUpState extends State<SignUp> {
                         autofocus: false,
                         keyboardType: TextInputType.number,
                         textInputAction: TextInputAction.next,
-                        controller: numeroTelEditingController,
+                        controller: ContactEditingController,
                         validator: (value) {
                           RegExp regex = RegExp(
                             r'^.{10,}$',
@@ -248,7 +287,7 @@ class _SignUpState extends State<SignUp> {
                           return null;
                         },
                         onSaved: (value) {
-                          numeroTelEditingController.text = value!;
+                          ContactEditingController.text = value!;
                         },
                         decoration: InputDecoration(
                           contentPadding: EdgeInsets.all(8),
@@ -395,14 +434,6 @@ class _SignUpState extends State<SignUp> {
                         ),
                       ],
                     ),
-                    // SizedBox(
-                    //   height: 15,
-                    // ),
-                    // Image(
-                    //   image: AssetImage("assets/welcome.png"),
-                    //   height: 100,
-                    //   width: 130,
-                    // ),
                   ],
                 ),
               ),

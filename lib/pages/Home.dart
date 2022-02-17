@@ -14,7 +14,7 @@ import 'dart:ui' as ui;
 
 import 'HomePage.dart';
 import 'SignUpPage.dart';
-import 'model/user_model.dart';
+import 'package:recette_app/model/user_model.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
