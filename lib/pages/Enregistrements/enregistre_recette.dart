@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:recette_app/Service/Auth_Service.dart';
+import 'package:recette_app/model/recette_model.dart';
 import 'package:recette_app/pages/Home.dart';
 import 'package:recette_app/pages/HomePage.dart';
 import 'package:recette_app/pages/MenuPage.dart';
@@ -24,16 +25,15 @@ class AddTodo extends StatefulWidget {
 class _AddTodoState extends State<AddTodo> {
   TextEditingController dateinput = TextEditingController();
   // final TextEditingController _nomController = TextEditingController();
-  final TextEditingController _dateController = TextEditingController();
-  final TextEditingController _siController = TextEditingController();
-  final TextEditingController _esController = TextEditingController();
-  int espece_val = 0;
-  int theorique_val = 0;
+  final TextEditingController _prixController = TextEditingController();
+  // final TextEditingController _esController = TextEditingController();
+  int prix = 0;
+  // int theorique_val = 0;
 
-  AuthClass authClass = AuthClass();
   User? user = FirebaseAuth.instance.currentUser;
   UserModel loggedInUser = UserModel();
-
+  RecetteModel recetteModel = RecetteModel();
+  DateTime? maDate;
   // String contenu_champ_string = "";
   // int contenu_champ_number = 0;
 
@@ -41,9 +41,10 @@ class _AddTodoState extends State<AddTodo> {
   void initState() {
     super.initState();
     dateinput.text = ""; //set the initial value of text field
+    maDate = DateTime.now();
     initializeDateFormatting('fr_FR', null).then((_) => AddTodo());
     FirebaseFirestore.instance
-        .collection("users")
+        .collection("Utilisateur")
         .doc(user!.uid)
         .get()
         .then((value) {
@@ -147,9 +148,9 @@ class _AddTodoState extends State<AddTodo> {
                 DateFormat.yMMMMd('fr_FR').format(choix);
             String formattedDate = DateFormat('dd-MM-yyyy').format(choix);
             print(formattedDate);
-            // var difference = DateTime.now();
-            // print(difference);
             setState(() {
+              maDate = choix;
+              // print(maDate);
               dateinput.text =
                   formattedDate_affichage; //set output date to TextField value.
             });
@@ -177,9 +178,10 @@ class _AddTodoState extends State<AddTodo> {
   void _refresh() {
     setState(() {
       dateinput.text = "";
+      maDate = DateTime.now();
       // _nomController.text = "";
-      _siController.text = "";
-      _esController.text = "";
+      _prixController.text = "";
+      // _esController.text = "";
     });
   }
 
@@ -215,7 +217,7 @@ class _AddTodoState extends State<AddTodo> {
         gravity: ToastGravity.BOTTOM,
       );
       Navigator.of(context)
-          .push(MaterialPageRoute(builder: (context) => HomePage()));
+          .push(MaterialPageRoute(builder: (context) => AddTodo()));
     }
 
     return GestureDetector(
@@ -246,14 +248,20 @@ class _AddTodoState extends State<AddTodo> {
               InkWell(
                 onTap: () {
                   setState(() {
-                    espece_val = int.parse(_esController.text);
-                    theorique_val = int.parse(_siController.text);
+                    // maDate = DateTime.parse(dateinput.text);
+                    prix = int.parse(_prixController.text);
+                    // recetteModel.Id_rec = recetteModel.Id_rec;
+                    // recetteModel.Id_rec = ;
+                    recetteModel.Prix = prix;
+                    recetteModel.Date = maDate;
+                    recetteModel.Id_user = user!.uid;
+                    // theorique_val = int.parse(_siController.text);
                   });
                   FirebaseFirestore.instance.collection("Recette").add({
-                    "Date": dateinput.text,
+                    "Date": maDate,
                     "Id_user": loggedInUser.uid,
-                    "Recette espece": espece_val,
-                    "Recette site": theorique_val,
+                    "Prix": prix,
+                    // "Id_rec": recetteModel.Id_rec,
                   });
                   print("enregistrer");
                   showToastAsync();
@@ -336,7 +344,7 @@ class _AddTodoState extends State<AddTodo> {
                               margin: EdgeInsets.symmetric(horizontal: 20),
                             )),
                             Text(
-                              "Recette en espèce",
+                              "Recette",
                               style:
                                   TextStyle(fontSize: 16, color: Colors.black),
                             ),
@@ -352,37 +360,38 @@ class _AddTodoState extends State<AddTodo> {
                       SizedBox(
                         height: 20,
                       ),
-                      numberItem("Entrer la recette en espèce", _esController),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      Container(
-                        child: Row(
-                          children: [
-                            Expanded(
-                                child: Container(
-                              height: 1,
-                              color: Colors.grey,
-                              margin: EdgeInsets.symmetric(horizontal: 20),
-                            )),
-                            Text(
-                              "Recette du site",
-                              style:
-                                  TextStyle(fontSize: 16, color: Colors.black),
-                            ),
-                            Expanded(
-                                child: Container(
-                              height: 1,
-                              color: Colors.grey,
-                              margin: EdgeInsets.symmetric(horizontal: 20),
-                            )),
-                          ],
-                        ),
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      numberItem("Entrer la recette du site", _siController),
+                      numberItem(
+                          "Entrer la recette en espèce", _prixController),
+                      // SizedBox(
+                      //   height: 20,
+                      // ),
+                      // Container(
+                      //   child: Row(
+                      //     children: [
+                      //       Expanded(
+                      //           child: Container(
+                      //         height: 1,
+                      //         color: Colors.grey,
+                      //         margin: EdgeInsets.symmetric(horizontal: 20),
+                      //       )),
+                      //       Text(
+                      //         "Recette du site",
+                      //         style:
+                      //             TextStyle(fontSize: 16, color: Colors.black),
+                      //       ),
+                      //       Expanded(
+                      //           child: Container(
+                      //         height: 1,
+                      //         color: Colors.grey,
+                      //         margin: EdgeInsets.symmetric(horizontal: 20),
+                      //       )),
+                      //     ],
+                      //   ),
+                      // ),
+                      // SizedBox(
+                      //   height: 20,
+                      // ),
+                      // numberItem("Entrer la recette du site", _siController),
                     ],
                   ),
                 ),

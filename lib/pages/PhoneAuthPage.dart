@@ -1,4 +1,4 @@
-// ignore_for_file: unused_import, file_names, sized_box_for_whitespace, prefer_const_constructors, avoid_print, unused_local_variable, prefer_const_literals_to_create_immutables, use_full_hex_values_for_flutter_colors
+// ignore_for_file: unused_import, file_names, sized_box_for_whitespace, prefer_const_constructors, avoid_print, unused_local_variable, prefer_const_literals_to_create_immutables, use_full_hex_values_for_flutter_colors, unnecessary_import
 
 import 'dart:async';
 

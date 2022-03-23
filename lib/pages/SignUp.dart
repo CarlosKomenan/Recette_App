@@ -59,16 +59,16 @@ class _SignUpState extends State<SignUp> {
     FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
     User? user = _auth.currentUser;
     UserModel userModel = UserModel();
-    DomaineModel domaineModel = DomaineModel();
+    // DomaineModel domaineModel = DomaineModel();
 
     userModel.Email = user!.email;
     userModel.uid = user.uid;
     userModel.Nom = NomEditingController.text;
     userModel.Prenom = PrenomEditingController.text;
     userModel.Contact = ContactEditingController.text;
-    userModel.Photo = "NONE";
+    userModel.Photo = "assets/admin.png";
     userModel.Nom_entreprise = "NONE";
-    userModel.Id_domaine = domaineModel.Id_domaine;
+    // userModel.Id_domaine = domaineModel.Id_domaine;
 
     await firebaseFirestore
         .collection("Utilisateur")

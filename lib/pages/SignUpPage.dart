@@ -1,4 +1,4 @@
-// ignore_for_file: file_names, unused_import, avoid_unnecessary_containers, sized_box_for_whitespace, dead_code, unused_element, unused_field, avoid_print, non_constant_identifier_names, prefer_const_constructors, duplicate_ignore, unused_local_variable, avoid_web_libraries_in_flutter
+// ignore_for_file: file_names, unused_import, avoid_unnecessary_containers, sized_box_for_whitespace, dead_code, unused_element, unused_field, avoid_print, non_constant_identifier_names, prefer_const_constructors, duplicate_ignore, unused_local_variable, avoid_web_libraries_in_flutter, unnecessary_import
 
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:flutter/cupertino.dart';

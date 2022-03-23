@@ -111,7 +111,8 @@ class _HomePageState extends State<HomePage> {
             stream: _stream,
             builder: (context, snapshot) {
               if (!snapshot.hasData) {
-                return Center(child: CircularProgressIndicator());
+                // return Center(child: CircularProgressIndicator());
+                return Text("Aucun fichier existant");
               }
               return ListView.builder(
                   itemCount: (snapshot.data as QuerySnapshot).docs.length,
@@ -122,7 +123,7 @@ class _HomePageState extends State<HomePage> {
                     Map<String, dynamic> document =
                         (snapshot.data as QuerySnapshot).docs[index].data()
                             as Map<String, dynamic>;
-                    switch (document["Recette site"] > 1000000) {
+                    switch (document["Prix"] > 1000000) {
                       case true:
                         iconData = Icons.sentiment_very_satisfied_outlined;
                         iconColor = Colors.white;
@@ -232,10 +233,10 @@ class _HomePageState extends State<HomePage> {
                         iconBgColor: iconBgColor,
                         iconColor: iconColor,
                         iconData: iconData,
-                        time: document['Date'].toString(),
+                        time: "document['Date'].toString()",
                         // nom: document['Nom'] ?? "Non disponible",
-                        espece: document['Recette espece'],
-                        theorique: document['Recette site'],
+                        prix: document['Prix'],
+                        // theorique: document['Recette site'],
                         document: document,
                       ),
                     );

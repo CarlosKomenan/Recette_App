@@ -15,14 +15,14 @@ class TodoCard extends StatelessWidget {
     required this.iconColor,
     required this.time,
     required this.iconBgColor,
-    required this.espece,
-    required this.theorique,
+    required this.prix,
+    // required this.theorique,
     required this.document,
   }) : super(key: key);
 
   // final String nom;
-  final int espece;
-  final int theorique;
+  final int prix;
+  // final int theorique;
   final IconData iconData;
   final Color iconColor;
   final String time;
@@ -138,13 +138,13 @@ class TodoCard extends StatelessWidget {
                                   width: 8,
                                 ),
                                 Text(
-                                  "Espèce: ",
+                                  "Somme: ",
                                   style: TextStyle(
                                     color: Colors.white,
                                   ),
                                 ),
                                 Text(
-                                  espece.toString(),
+                                  prix.toString(),
                                   style: TextStyle(
                                       color: Colors.white,
                                       fontSize: 20,
@@ -161,43 +161,43 @@ class TodoCard extends StatelessWidget {
                                 ),
                               ],
                             ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Row(
-                              children: [
-                                Icon(
-                                  Icons.monitor,
-                                  color: Colors.white,
-                                ),
-                                SizedBox(
-                                  width: 8,
-                                ),
-                                Text(
-                                  "Logiciel: ",
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                  ),
-                                ),
-                                Text(
-                                  theorique.toString(),
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: 4,
-                                ),
-                                Text(
-                                  "FCFA",
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                  ),
-                                ),
-                              ],
-                            )
+                            // SizedBox(
+                            //   height: 10,
+                            // ),
+                            // Row(
+                            //   children: [
+                            //     Icon(
+                            //       Icons.monitor,
+                            //       color: Colors.white,
+                            //     ),
+                            //     SizedBox(
+                            //       width: 8,
+                            //     ),
+                            //     Text(
+                            //       "Logiciel: ",
+                            //       style: TextStyle(
+                            //         color: Colors.white,
+                            //       ),
+                            //     ),
+                            //     Text(
+                            //       theorique.toString(),
+                            //       style: TextStyle(
+                            //         color: Colors.white,
+                            //         fontSize: 20,
+                            //         fontWeight: FontWeight.bold,
+                            //       ),
+                            //     ),
+                            //     SizedBox(
+                            //       width: 4,
+                            //     ),
+                            //     Text(
+                            //       "FCFA",
+                            //       style: TextStyle(
+                            //         color: Colors.white,
+                            //       ),
+                            //     ),
+                            //   ],
+                            // )
                           ],
                         )
                       ],

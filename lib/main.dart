@@ -5,6 +5,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
+import 'package:get/get.dart';
 import 'package:recette_app/Service/Auth_service.dart';
 import 'package:recette_app/pages/Home.dart';
 import 'package:recette_app/pages/MenuPage.dart';
@@ -53,8 +54,8 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Home(),
+    return GetMaterialApp(
+      home: currentPage,
       debugShowCheckedModeBanner: false,
     );
   }

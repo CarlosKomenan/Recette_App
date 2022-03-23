@@ -1,4 +1,4 @@
-// ignore_for_file: file_names, unused_import, prefer_const_constructors, sized_box_for_whitespace, prefer_final_fields, prefer_const_literals_to_create_immutables, unused_local_variable, deprecated_member_use, avoid_unnecessary_containers, avoid_print, unnecessary_this, non_constant_identifier_names
+// ignore_for_file: file_names, unused_import, prefer_const_constructors, sized_box_for_whitespace, prefer_final_fields, prefer_const_literals_to_create_immutables, unused_local_variable, deprecated_member_use, avoid_unnecessary_containers, unnecessary_this, non_constant_identifier_names, unnecessary_import
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -13,6 +13,7 @@ import 'package:recette_app/Service/Auth_Service.dart';
 import 'package:recette_app/model/domaine_model.dart';
 import 'package:recette_app/pages/DetailsPage.dart';
 import 'package:recette_app/pages/Enregistrements/transition.dart';
+import 'package:recette_app/pages/FlatButtonPage/DetailsComptePage.dart';
 import 'package:recette_app/pages/SignIn.dart';
 import 'dart:ui' as ui;
 
@@ -33,7 +34,7 @@ class _MenuPageState extends State<MenuPage> {
   AuthClass authClass = AuthClass();
   User? user = FirebaseAuth.instance.currentUser;
   UserModel loggedInUser = UserModel();
-  DomaineModel domaineModel = DomaineModel();
+  // DomaineModel domaineModel = DomaineModel();
   String photo_defaut = "assets/admin.png";
 
   @override
@@ -204,7 +205,12 @@ class _MenuPageState extends State<MenuPage> {
                         ),
                         icon: Icon(Icons.recent_actors),
                         label: Text("Détails compte"),
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => ComptePersonnel()));
+                        },
                         color: Colors.grey[300],
                         textTheme: ButtonTextTheme.normal,
                       ),

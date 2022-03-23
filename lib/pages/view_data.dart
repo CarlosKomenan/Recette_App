@@ -209,7 +209,7 @@ class _ViewDataState extends State<ViewData> {
                 Navigator.push(context,
                     MaterialPageRoute(builder: (context) => const HomePage()));
               },
-              child: const Text(
+              child: Text(
                 'Modification recette',
               ),
             ),

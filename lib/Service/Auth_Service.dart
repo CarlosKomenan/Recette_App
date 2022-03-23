@@ -1,4 +1,4 @@
-// ignore_for_file: file_names, prefer_final_fields, unused_field, unused_local_variable, prefer_const_constructors, unused_import, dead_code, avoid_print, prefer_function_declarations_over_variables, avoid_types_as_parameter_names, non_constant_identifier_names
+// ignore_for_file: file_names, prefer_final_fields, unused_field, unused_local_variable, prefer_const_constructors, unused_import, dead_code, avoid_print, prefer_function_declarations_over_variables, avoid_types_as_parameter_names, non_constant_identifier_names, unnecessary_import
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';

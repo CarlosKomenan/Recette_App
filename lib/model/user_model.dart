@@ -6,7 +6,6 @@ class UserModel {
   String? Nom;
   String? Prenom;
   String? Contact;
-  String? Id_domaine;
   String? Nom_entreprise;
   String? Photo;
   UserModel(
@@ -15,7 +14,6 @@ class UserModel {
       this.Nom,
       this.Prenom,
       this.Contact,
-      this.Id_domaine,
       this.Nom_entreprise,
       this.Photo});
 
@@ -27,7 +25,6 @@ class UserModel {
         Nom: map['Nom'],
         Prenom: map['Prenom'],
         Contact: map['Contact'],
-        Id_domaine: map['Id_domaine'],
         Nom_entreprise: map['Nom_entreprise'],
         Photo: map['Photo']);
   }
@@ -40,7 +37,6 @@ class UserModel {
       'Nom': Nom,
       'Prenom': Prenom,
       'Contact': Contact,
-      'Id_domaine': Id_domaine,
       'Nom_entreprise': Nom_entreprise,
       'Photo': Photo
     };
