@@ -55,7 +55,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      home: currentPage,
+      home: Home(),
       debugShowCheckedModeBanner: false,
     );
   }

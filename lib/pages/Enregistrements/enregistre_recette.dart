@@ -22,6 +22,8 @@ class AddTodo extends StatefulWidget {
   _AddTodoState createState() => _AddTodoState();
 }
 
+enum ButtonState { init, loading, done }
+
 class _AddTodoState extends State<AddTodo> {
   TextEditingController dateinput = TextEditingController();
   // final TextEditingController _nomController = TextEditingController();
@@ -30,12 +32,37 @@ class _AddTodoState extends State<AddTodo> {
   int prix = 0;
   // int theorique_val = 0;
 
+  ButtonState state = ButtonState.init;
+  final _formKey = GlobalKey<FormState>();
   User? user = FirebaseAuth.instance.currentUser;
   UserModel loggedInUser = UserModel();
   RecetteModel recetteModel = RecetteModel();
   DateTime? maDate;
   // String contenu_champ_string = "";
   // int contenu_champ_number = 0;
+
+  DropdownMenuItem<String> buildMenuItem(String item) => DropdownMenuItem(
+        value: item,
+        child: Text(
+          item,
+          style: TextStyle(fontSize: 17),
+        ),
+      );
+  Widget buildSmallButton(isDone) {
+    final color = isDone ? Colors.green : Colors.blueAccent;
+    return Container(
+      decoration: BoxDecoration(shape: BoxShape.circle, color: color),
+      child: Center(
+        child: isDone
+            ? Icon(
+                Icons.done,
+                size: 40,
+                color: Colors.white,
+              )
+            : CircularProgressIndicator(color: Colors.white),
+      ),
+    );
+  }
 
   @override
   void initState() {
@@ -53,70 +80,32 @@ class _AddTodoState extends State<AddTodo> {
     });
   }
 
-  Widget textItem(
-      String labelText, TextEditingController controller, bool obscureText) {
+  Widget numberItem(TextEditingController controller) {
     return InkWell(
-      onTap: () {
-        setState(() {
-          // refresh_Controller.text = contenu_champ_string;
-        });
-      },
+      // onTap: () {
+      //   setState(() {});
+      // },
       child: Container(
           width: MediaQuery.of(context).size.width - 70,
           height: 55,
           child: TextFormField(
-            onChanged: (String string) {
-              setState(() {
-                // poids = string as double? tryParse(String string);
-                // if (string.isEmpty) {
-                //   contenu_champ_string = "";
-                // } else {
-                //   contenu_champ_string = string;
-                // }
-              });
-            },
-            controller: controller,
-            obscureText: obscureText,
-            style: const TextStyle(fontSize: 17, color: Colors.black),
-            decoration: InputDecoration(
-                labelText: labelText,
-                labelStyle: const TextStyle(fontSize: 17, color: Colors.black),
-                focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(15),
-                    borderSide:
-                        const BorderSide(width: 1.5, color: Colors.blue)),
-                enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(15),
-                    borderSide:
-                        const BorderSide(width: 1, color: Colors.grey))),
-          )),
-    );
-  }
-
-  Widget numberItem(String labelText, TextEditingController controller) {
-    return InkWell(
-      onTap: () {
-        setState(() {});
-      },
-      child: Container(
-          width: MediaQuery.of(context).size.width - 70,
-          height: 55,
-          child: TextFormField(
-            onChanged: (String string) {
-              setState(() {
-                // poids = string as double? tryParse(String string);
-                // if (string.isEmpty) {
-                //   contenu_champ_number = 0;
-                // } else {
-                //   contenu_champ_number = int.parse(string);
-                // }
-              });
-            },
+            autofocus: false,
             keyboardType: TextInputType.number,
             controller: controller,
+            validator: (value) {
+              //champ vide
+              if (value!.isEmpty) {
+                return "Veuillez renseigner ce champ svp";
+              }
+              return null;
+            },
+            onSaved: (value) {
+              controller.text = value!;
+            },
             style: const TextStyle(fontSize: 17, color: Colors.black),
             decoration: InputDecoration(
-                labelText: labelText,
+                // labelText: labelText,
+                hintText: "Entrer la recette",
                 labelStyle: const TextStyle(fontSize: 17, color: Colors.black),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(15),
@@ -134,7 +123,7 @@ class _AddTodoState extends State<AddTodo> {
     return Container(
       width: MediaQuery.of(context).size.width - 70,
       height: 55,
-      child: TextField(
+      child: TextFormField(
         onTap: () async {
           DateTime? choix = await showDatePicker(
               context: context,
@@ -158,12 +147,24 @@ class _AddTodoState extends State<AddTodo> {
             print('Date non selectionnée');
           }
         },
+        autofocus: false,
         readOnly: true,
         controller: dateinput,
+        validator: (value) {
+          //champ vide
+          if (value!.isEmpty) {
+            return "Veuillez renseigner ce champ svp";
+          }
+          return null;
+        },
+        onSaved: (value) {
+          dateinput.text = value!;
+        },
         obscureText: false,
         style: const TextStyle(fontSize: 17, color: Colors.black),
         decoration: InputDecoration(
-            labelText: 'Selectionner la date',
+            // labelText: 'Selectionner la date',
+            hintText: "Selectionner la date",
             labelStyle: const TextStyle(fontSize: 17, color: Colors.black),
             focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(15),
@@ -210,6 +211,12 @@ class _AddTodoState extends State<AddTodo> {
           gravity: ToastGravity.BOTTOM,
         );
 
+    void VideToast() => Fluttertoast.showToast(
+          msg: "Fomulaire imcomplet",
+          fontSize: 18,
+          gravity: ToastGravity.BOTTOM,
+        );
+
     void showToastAsync() async {
       await Fluttertoast.showToast(
         msg: "Recette enregistrer",
@@ -217,16 +224,55 @@ class _AddTodoState extends State<AddTodo> {
         gravity: ToastGravity.BOTTOM,
       );
       Navigator.of(context)
-          .push(MaterialPageRoute(builder: (context) => AddTodo()));
+          .push(MaterialPageRoute(builder: (context) => Transition()));
     }
 
+    Future EnregistrerRecette() async {
+      if (_formKey.currentState!.validate()) {
+        try {
+          setState(() => state = ButtonState.loading);
+          await Future.delayed(Duration(seconds: 2));
+          setState(() => state = ButtonState.done);
+          await Future.delayed(Duration(seconds: 2));
+          setState(() => state = ButtonState.init);
+          prix = int.parse(_prixController.text);
+          recetteModel.Prix = prix;
+          recetteModel.Date = maDate;
+          recetteModel.Id_user = user!.uid;
+          FirebaseFirestore.instance.collection("Recette").add({
+            "Date": maDate,
+            "Id_user": loggedInUser.uid,
+            "Prix": prix,
+            // "Id_rec": recetteModel.Id_rec,
+          });
+          print("enregistrer");
+          showToastAsync();
+        } on FirebaseAuthException catch (e) {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(e.message.toString()),
+            backgroundColor: Colors.red,
+          ));
+        } catch (e) {
+          print(e);
+        }
+      }
+
+      // maDate = DateTime.parse(dateinput.text);
+      // recetteModel.Id_rec = recetteModel.Id_rec;
+      // recetteModel.Id_rec = ;
+
+      // theorique_val = int.parse(_siController.text);
+    }
+
+    bool isStretched = state == ButtonState.init;
+    bool isDone = state == ButtonState.done;
     return GestureDetector(
       onTap: (() => FocusScope.of(context).requestFocus(FocusNode())),
       child: Scaffold(
           appBar: AppBar(
             leading: IconButton(
               icon: Icon(Icons.arrow_back_ios_new_outlined),
-              tooltip: 'Retour Icon',
+              tooltip: 'Retour Option',
               onPressed: () {
                 Navigator.of(context).push(
                     MaterialPageRoute(builder: (context) => Transition()));
@@ -245,30 +291,23 @@ class _AddTodoState extends State<AddTodo> {
               ),
             ),
             actions: [
+              // InkWell(
+              //   onTap: () {
+              //     EnregistrerRecette();
+              //   },
+              //   child: IconButton(
+              //       icon: Icon(Icons.done, color: Colors.white),
+              //       onPressed: null),
+              // ),
               InkWell(
-                onTap: () {
-                  setState(() {
-                    // maDate = DateTime.parse(dateinput.text);
-                    prix = int.parse(_prixController.text);
-                    // recetteModel.Id_rec = recetteModel.Id_rec;
-                    // recetteModel.Id_rec = ;
-                    recetteModel.Prix = prix;
-                    recetteModel.Date = maDate;
-                    recetteModel.Id_user = user!.uid;
-                    // theorique_val = int.parse(_siController.text);
-                  });
-                  FirebaseFirestore.instance.collection("Recette").add({
-                    "Date": maDate,
-                    "Id_user": loggedInUser.uid,
-                    "Prix": prix,
-                    // "Id_rec": recetteModel.Id_rec,
-                  });
-                  print("enregistrer");
-                  showToastAsync();
+                onTap: () async {
+                  EnregistrerRecette();
                 },
-                child: IconButton(
-                    icon: Icon(Icons.done, color: Colors.white),
-                    onPressed: null),
+                child: isStretched
+                    ? IconButton(
+                        icon: Icon(Icons.done, color: Colors.white),
+                        onPressed: null)
+                    : buildSmallButton(isDone),
               ),
               InkWell(
                 onTap: () {
@@ -284,115 +323,120 @@ class _AddTodoState extends State<AddTodo> {
               ),
             ],
           ),
-          body: SingleChildScrollView(
-            child: Container(
-              decoration: BoxDecoration(color: Colors.blue[50]),
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height,
-              child: Card(
-                margin: const EdgeInsets.fromLTRB(25, 20, 25, 200),
-                color: Colors.white,
-                shadowColor: Colors.blueGrey,
-                elevation: 3,
-                shape: const RoundedRectangleBorder(
-                    // side: BorderSide(color: Colors.green, width: 3),
-                    borderRadius: BorderRadius.all(Radius.circular(10))),
-                child: Center(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                        height: 30,
-                      ),
-                      Container(
-                        child: Row(
-                          children: [
-                            Expanded(
-                                child: Container(
-                              height: 1,
-                              color: Colors.grey,
-                              margin: EdgeInsets.symmetric(horizontal: 20),
-                            )),
-                            Text(
-                              "Date du jour",
-                              style:
-                                  TextStyle(fontSize: 16, color: Colors.black),
+          body: SafeArea(
+            child: Form(
+              key: _formKey,
+              autovalidateMode: AutovalidateMode.disabled,
+              child: SingleChildScrollView(
+                child: Container(
+                  decoration: BoxDecoration(color: Colors.blue[50]),
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height,
+                  child: Card(
+                    margin: const EdgeInsets.fromLTRB(25, 20, 25, 200),
+                    color: Colors.white,
+                    shadowColor: Colors.blueGrey,
+                    elevation: 3,
+                    shape: const RoundedRectangleBorder(
+                        // side: BorderSide(color: Colors.green, width: 3),
+                        borderRadius: BorderRadius.all(Radius.circular(10))),
+                    child: Center(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          SizedBox(
+                            height: 30,
+                          ),
+                          Container(
+                            child: Row(
+                              children: [
+                                Expanded(
+                                    child: Container(
+                                  height: 1,
+                                  color: Colors.grey,
+                                  margin: EdgeInsets.symmetric(horizontal: 20),
+                                )),
+                                Text(
+                                  "Date du jour",
+                                  style: TextStyle(
+                                      fontSize: 16, color: Colors.black),
+                                ),
+                                Expanded(
+                                    child: Container(
+                                  height: 1,
+                                  color: Colors.grey,
+                                  margin: EdgeInsets.symmetric(horizontal: 20),
+                                )),
+                              ],
                             ),
-                            Expanded(
-                                child: Container(
-                              height: 1,
-                              color: Colors.grey,
-                              margin: EdgeInsets.symmetric(horizontal: 20),
-                            )),
-                          ],
-                        ),
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      textDate(),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      Container(
-                        child: Row(
-                          children: [
-                            Expanded(
-                                child: Container(
-                              height: 1,
-                              color: Colors.grey,
-                              margin: EdgeInsets.symmetric(horizontal: 20),
-                            )),
-                            Text(
-                              "Recette",
-                              style:
-                                  TextStyle(fontSize: 16, color: Colors.black),
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          textDate(),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Container(
+                            child: Row(
+                              children: [
+                                Expanded(
+                                    child: Container(
+                                  height: 1,
+                                  color: Colors.grey,
+                                  margin: EdgeInsets.symmetric(horizontal: 20),
+                                )),
+                                Text(
+                                  "Recette",
+                                  style: TextStyle(
+                                      fontSize: 16, color: Colors.black),
+                                ),
+                                Expanded(
+                                    child: Container(
+                                  height: 1,
+                                  color: Colors.grey,
+                                  margin: EdgeInsets.symmetric(horizontal: 20),
+                                )),
+                              ],
                             ),
-                            Expanded(
-                                child: Container(
-                              height: 1,
-                              color: Colors.grey,
-                              margin: EdgeInsets.symmetric(horizontal: 20),
-                            )),
-                          ],
-                        ),
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          numberItem(_prixController),
+                          // SizedBox(
+                          //   height: 20,
+                          // ),
+                          // Container(
+                          //   child: Row(
+                          //     children: [
+                          //       Expanded(
+                          //           child: Container(
+                          //         height: 1,
+                          //         color: Colors.grey,
+                          //         margin: EdgeInsets.symmetric(horizontal: 20),
+                          //       )),
+                          //       Text(
+                          //         "Recette du site",
+                          //         style:
+                          //             TextStyle(fontSize: 16, color: Colors.black),
+                          //       ),
+                          //       Expanded(
+                          //           child: Container(
+                          //         height: 1,
+                          //         color: Colors.grey,
+                          //         margin: EdgeInsets.symmetric(horizontal: 20),
+                          //       )),
+                          //     ],
+                          //   ),
+                          // ),
+                          // SizedBox(
+                          //   height: 20,
+                          // ),
+                          // numberItem("Entrer la recette du site", _siController),
+                        ],
                       ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      numberItem(
-                          "Entrer la recette en espèce", _prixController),
-                      // SizedBox(
-                      //   height: 20,
-                      // ),
-                      // Container(
-                      //   child: Row(
-                      //     children: [
-                      //       Expanded(
-                      //           child: Container(
-                      //         height: 1,
-                      //         color: Colors.grey,
-                      //         margin: EdgeInsets.symmetric(horizontal: 20),
-                      //       )),
-                      //       Text(
-                      //         "Recette du site",
-                      //         style:
-                      //             TextStyle(fontSize: 16, color: Colors.black),
-                      //       ),
-                      //       Expanded(
-                      //           child: Container(
-                      //         height: 1,
-                      //         color: Colors.grey,
-                      //         margin: EdgeInsets.symmetric(horizontal: 20),
-                      //       )),
-                      //     ],
-                      //   ),
-                      // ),
-                      // SizedBox(
-                      //   height: 20,
-                      // ),
-                      // numberItem("Entrer la recette du site", _siController),
-                    ],
+                    ),
                   ),
                 ),
               ),
@@ -401,3 +445,54 @@ class _AddTodoState extends State<AddTodo> {
     );
   }
 }
+
+            // onChanged: (String string) {
+            //   setState(() {
+            //     // poids = string as double? tryParse(String string);
+            //     // if (string.isEmpty) {
+            //     //   contenu_champ_number = 0;
+            //     // } else {
+            //     //   contenu_champ_number = int.parse(string);
+            //     // }
+            //   });
+            // },
+
+// Widget textItem(
+//     String labelText, TextEditingController controller, bool obscureText) {
+//   return InkWell(
+//     onTap: () {
+//       setState(() {
+//         // refresh_Controller.text = contenu_champ_string;
+//       });
+//     },
+//     child: Container(
+//         width: MediaQuery.of(context).size.width - 70,
+//         height: 55,
+//         child: TextFormField(
+//           onChanged: (String string) {
+//             setState(() {
+//               // poids = string as double? tryParse(String string);
+//               // if (string.isEmpty) {
+//               //   contenu_champ_string = "";
+//               // } else {
+//               //   contenu_champ_string = string;
+//               // }
+//             });
+//           },
+//           controller: controller,
+//           obscureText: obscureText,
+//           style: const TextStyle(fontSize: 17, color: Colors.black),
+//           decoration: InputDecoration(
+//               labelText: labelText,
+//               labelStyle: const TextStyle(fontSize: 17, color: Colors.black),
+//               focusedBorder: OutlineInputBorder(
+//                   borderRadius: BorderRadius.circular(15),
+//                   borderSide:
+//                       const BorderSide(width: 1.5, color: Colors.blue)),
+//               enabledBorder: OutlineInputBorder(
+//                   borderRadius: BorderRadius.circular(15),
+//                   borderSide:
+//                       const BorderSide(width: 1, color: Colors.grey))),
+//         )),
+//   );
+// }

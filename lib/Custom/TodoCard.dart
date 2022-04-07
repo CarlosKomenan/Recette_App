@@ -115,7 +115,7 @@ class TodoCard extends StatelessWidget {
                                   fontWeight: FontWeight.w500),
                             ),
                             Text(
-                              time,
+                              "time,",
                               style: TextStyle(
                                   color: Colors.white,
                                   fontWeight: FontWeight.w500),

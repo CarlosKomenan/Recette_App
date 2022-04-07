@@ -1,6 +1,7 @@
 // ignore_for_file: file_names, prefer_const_constructors, prefer_const_literals_to_create_immutables, avoid_unnecessary_containers, sized_box_for_whitespace, unused_local_variable, unused_import, unused_field, non_constant_identifier_names, must_call_super, unnecessary_this, avoid_print, must_be_immutable, unnecessary_import
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -180,6 +181,20 @@ class _ComptePersonnelState extends State<ComptePersonnel> {
     }
   }
 
+  Future uploadImage({required String path}) async {
+    FirebaseStorage storage = FirebaseStorage.instance;
+    Reference ref = storage.ref().child(path + "/" + pickedImage.toString());
+    await ref.putFile(pickedImage!);
+    // UploadTask upload = ref.putFile(img!);
+    String url = await ref.getDownloadURL();
+    // await FirebaseFirestore.collection("Utilisateur");
+    // upload.then((res) {
+    //   res.ref.getDownloadURL();
+    // });
+    // await upload.onComplete;
+    // return await ref.getDownloadURL();
+  }
+
   @override
   Widget build(BuildContext context) {
     void showToastAsync(String text) async {
@@ -332,6 +347,7 @@ class _ComptePersonnelState extends State<ComptePersonnel> {
                               //   photo_val = _photoController.text;
                               //   email_val = _emailController.text;
                               // });
+                              uploadImage(path: "images");
                               FirebaseFirestore.instance
                                   .collection("Utilisateur")
                                   .doc(user!.uid)

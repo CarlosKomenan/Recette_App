@@ -1,10 +1,18 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, avoid_print, avoid_unnecessary_containers, unused_import
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, avoid_print, avoid_unnecessary_containers, unused_import, non_constant_identifier_names, unused_local_variable
 
 import 'package:flutter/material.dart';
-import 'package:recette_app/Custom/ObjetDepense.dart';
-
+import 'package:recette_app/Custom/DepenseCard.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:recette_app/Custom/TodoCard.dart';
+import 'package:recette_app/Service/Auth_Service.dart';
+import 'package:recette_app/pages/DetailsPage.dart';
+import 'package:recette_app/pages/Home.dart';
+import 'package:recette_app/pages/SignUpPage.dart';
+import 'package:firebase_core/firebase_core.dart';
 import '../Home.dart';
+import 'package:recette_app/pages/view_data.dart';
 import 'enregistrer_objet.dart';
+import 'recherche_objet.dart';
 
 class ListObjet extends StatefulWidget {
   const ListObjet({Key? key}) : super(key: key);
@@ -14,9 +22,16 @@ class ListObjet extends StatefulWidget {
 }
 
 class _ListObjetState extends State<ListObjet> {
+  // AuthClass authClass = AuthClass();
+
+  final Stream<QuerySnapshot> _stream = FirebaseFirestore.instance
+      .collection("ObjetDepense")
+      .orderBy("Date_creation", descending: true)
+      .snapshots();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.blue[50],
       appBar: AppBar(
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios_new_outlined),
@@ -30,17 +45,15 @@ class _ListObjetState extends State<ListObjet> {
           Padding(
             padding: const EdgeInsets.only(right: 20),
             child: Ink(
-              // height: 30,
               child: IconButton(
                 icon: Icon(Icons.search),
                 color: Colors.white,
                 iconSize: 30,
                 onPressed: () {
-                  print("Recherche");
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => rechercheObjet()));
                 },
               ),
-              // decoration:
-              //     ShapeDecoration(color: Colors.grey[300], shape: CircleBorder()),
             ),
           )
         ],
@@ -57,13 +70,30 @@ class _ListObjetState extends State<ListObjet> {
           ),
         ),
       ),
-      body: Column(
-        children: [
-          SizedBox(
-            height: 20,
-          ),
-          Flexible(child: ObjetD()),
-        ],
+      body: Center(
+        child: StreamBuilder(
+            stream: _stream,
+            builder: (context, snapshot) {
+              if (!snapshot.hasData) {
+                return Text("Aucun fichier existant");
+              }
+              return GridView.builder(
+                itemCount: (snapshot.data as QuerySnapshot).docs.length,
+                itemBuilder: (context, index) {
+                  Map<String, dynamic> document =
+                      (snapshot.data as QuerySnapshot).docs[index].data()
+                          as Map<String, dynamic>;
+                  return Padding(
+                      padding: const EdgeInsets.all(6.0),
+                      child: DepenseCard(
+                        // iconObjet: document[index]["icon"],
+                        intitule: document["Intitule"], document: document,
+                      ));
+                },
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 3),
+              );
+            }),
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
