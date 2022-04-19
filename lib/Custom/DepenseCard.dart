@@ -36,6 +36,7 @@ class DepenseCard extends StatelessWidget {
             Text(
               intitule,
               style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
+              textAlign: TextAlign.center,
             ),
           ],
         ),

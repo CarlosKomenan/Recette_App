@@ -6,15 +6,20 @@ class ObjetDepense {
   String? Intitule;
   String? Id_user;
   DateTime? Date_creation;
-  ObjetDepense({this.Intitule, this.Id_user, Date_creation});
+  String? PremiereLettreIntitule;
+  ObjetDepense(
+      {this.Intitule,
+      this.Id_user,
+      Date_creation,
+      this.PremiereLettreIntitule});
 
   //Recevoir les données du server
   factory ObjetDepense.fromMap(map) {
     return ObjetDepense(
-      Intitule: map['Intitule'],
-      Id_user: map['Id_user'],
-      Date_creation: map['Date_creation'],
-    );
+        Intitule: map['Intitule'],
+        Id_user: map['Id_user'],
+        Date_creation: map['Date_creation'],
+        PremiereLettreIntitule: map['PremiereLettreIntitule']);
   }
 
   //Envoyé les données vers le server
@@ -23,6 +28,7 @@ class ObjetDepense {
       'Intitule': Intitule,
       'Id_user': Id_user,
       'Date_creation': Date_creation,
+      'PremiereLettreIntitule': PremiereLettreIntitule
     };
   }
 }

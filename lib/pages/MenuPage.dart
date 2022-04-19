@@ -19,6 +19,7 @@ import 'dart:ui' as ui;
 
 import 'HomePage.dart';
 import 'ObjetsDepenses/list_objets.dart';
+import 'ObjetsDepenses/search_objet.dart';
 import 'SignUpPage.dart';
 import 'package:recette_app/model/user_model.dart';
 
@@ -315,7 +316,7 @@ class _MenuPageState extends State<MenuPage> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => const ListObjet()));
+                                builder: (context) => ListObjet()));
                       },
                       child: SizedBox(
                         width: 170.0,

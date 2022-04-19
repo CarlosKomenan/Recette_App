@@ -28,6 +28,7 @@ class _AddTodoOState extends State<AddTodoO> {
   ObjetDepense objetDepenseModel = ObjetDepense();
   String? value;
   String? nom_depense;
+  String? premiereLettreNom_depense;
   DateTime? maDateActuelle;
   DropdownMenuItem<String> buildMenuItem(String item) => DropdownMenuItem(
         value: item,
@@ -143,10 +144,14 @@ class _AddTodoOState extends State<AddTodoO> {
         objetDepenseModel.Intitule = nom_depense;
         objetDepenseModel.Id_user = user!.uid;
         nom_depense = _nomController.text;
+        premiereLettreNom_depense =
+            nom_depense!.substring(0, 1).toUpperCase().toString();
         FirebaseFirestore.instance.collection("ObjetDepense").add({
-          "Intitule": nom_depense.toString(),
+          "Intitule": nom_depense!.substring(0, 1).toUpperCase() +
+              nom_depense!.substring(1).toString(),
           "Id_user": loggedInUser.uid,
           "Date_creation": maDateActuelle,
+          'PremiereLettreIntitule': premiereLettreNom_depense.toString(),
         });
         showToastAsync();
       } on FirebaseAuthException catch (e) {

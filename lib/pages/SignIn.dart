@@ -70,9 +70,12 @@ class _SignInState extends State<SignIn> {
         onPressed: () async {
           if (isLoading) return;
           setState(() => isLoading = true);
-          await Future.delayed(Duration(seconds: 3));
+          Future.delayed(Duration(seconds: 2), () {
+            setState(() {
+              isLoading = false;
+            });
+          });
           setState(() {
-            isLoading = false;
             Connexion(emailController.text, passwordController.text, context);
           });
         },

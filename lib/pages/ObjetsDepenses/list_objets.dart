@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, avoid_print, avoid_unnecessary_containers, unused_import, non_constant_identifier_names, unused_local_variable
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, avoid_print, avoid_unnecessary_containers, unused_import, non_constant_identifier_names, unused_local_variable, unused_field
 
 import 'package:flutter/material.dart';
 import 'package:recette_app/Custom/DepenseCard.dart';
@@ -7,6 +7,7 @@ import 'package:recette_app/Custom/TodoCard.dart';
 import 'package:recette_app/Service/Auth_Service.dart';
 import 'package:recette_app/pages/DetailsPage.dart';
 import 'package:recette_app/pages/Home.dart';
+import 'package:recette_app/pages/ObjetsDepenses/search_objet.dart';
 import 'package:recette_app/pages/SignUpPage.dart';
 import 'package:firebase_core/firebase_core.dart';
 import '../Home.dart';
@@ -23,7 +24,7 @@ class ListObjet extends StatefulWidget {
 
 class _ListObjetState extends State<ListObjet> {
   // AuthClass authClass = AuthClass();
-
+  final SearchObjet _searchObjet = SearchObjet();
   final Stream<QuerySnapshot> _stream = FirebaseFirestore.instance
       .collection("ObjetDepense")
       .orderBy("Date_creation", descending: true)
@@ -44,16 +45,13 @@ class _ListObjetState extends State<ListObjet> {
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 20),
-            child: Ink(
-              child: IconButton(
-                icon: Icon(Icons.search),
-                color: Colors.white,
-                iconSize: 30,
-                onPressed: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => rechercheObjet()));
-                },
-              ),
+            child: IconButton(
+              icon: Icon(Icons.search),
+              color: Colors.white,
+              iconSize: 30,
+              onPressed: () {
+                showSearch(context: context, delegate: _searchObjet);
+              },
             ),
           )
         ],
