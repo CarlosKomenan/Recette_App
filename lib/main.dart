@@ -56,6 +56,7 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       home: Home(),
+      // home: SignInPage(),
       debugShowCheckedModeBanner: false,
     );
   }

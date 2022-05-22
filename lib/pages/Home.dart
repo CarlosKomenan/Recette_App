@@ -12,6 +12,7 @@ import 'package:recette_app/pages/MenuPage.dart';
 import 'package:recette_app/pages/SignIn.dart';
 import 'dart:ui' as ui;
 
+import 'Dashboard.dart';
 import 'HomePage.dart';
 import 'SignUpPage.dart';
 import 'package:recette_app/model/user_model.dart';
@@ -32,9 +33,9 @@ class _HomeState extends State<Home> {
     bodySelection() {
       switch (index) {
         case 0:
-          return MenuPage();
+          return Dashboard();
         case 1:
-          return AddTodo();
+          return MenuPage();
         case 2:
           return HomePage();
       }
@@ -53,7 +54,7 @@ class _HomeState extends State<Home> {
               color: Colors.white,
             ),
             Icon(
-              Icons.supervised_user_circle_rounded,
+              Icons.grid_view_outlined,
               size: 30,
               color: Colors.white,
             ),

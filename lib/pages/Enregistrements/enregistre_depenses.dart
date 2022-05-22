@@ -139,7 +139,8 @@ class _AddTodoDState extends State<AddTodoD> {
             },
             keyboardType: TextInputType.number,
             controller: controller,
-            style: const TextStyle(fontSize: 17, color: Colors.black),
+            style: const TextStyle(
+                fontSize: 17, color: Colors.black, letterSpacing: 6),
             decoration: InputDecoration(
                 labelText: labelText,
                 labelStyle: const TextStyle(fontSize: 17, color: Colors.black),
@@ -394,7 +395,7 @@ class _AddTodoDState extends State<AddTodoD> {
                             color: Colors.black,
                           ),
                           hint: Text(
-                            "Selectionner dépense",
+                            "Selectionner une dépense",
                             style: TextStyle(fontSize: 17, color: Colors.black),
                           ),
                           items: items.map(buildMenuItem).toList(),
@@ -449,7 +450,7 @@ class _AddTodoDState extends State<AddTodoD> {
                               margin: EdgeInsets.symmetric(horizontal: 20),
                             )),
                             Text(
-                              "Somme",
+                              "Coût",
                               style:
                                   TextStyle(fontSize: 16, color: Colors.black),
                             ),
@@ -465,7 +466,8 @@ class _AddTodoDState extends State<AddTodoD> {
                       SizedBox(
                         height: 20,
                       ),
-                      numberItem("Entrer la recette du site", _smeController),
+                      numberItem(
+                          "Entrer le coût de la dépense", _smeController),
                     ],
                   ),
                 ),
@@ -475,3 +477,374 @@ class _AddTodoDState extends State<AddTodoD> {
     );
   }
 }
+
+
+
+
+
+
+
+
+
+// // ignore_for_file: unused_import, file_names, prefer_const_constructors, avoid_print, sized_box_for_whitespace, avoid_unnecessary_containers, prefer_const_literals_to_create_immutables, unused_field, avoid_returning_null_for_void, prefer_void_to_null, unused_local_variable, unused_element, non_constant_identifier_names, deprecated_member_use, prefer_equal_for_default_values, unnecessary_this, prefer_typing_uninitialized_variables
+
+// import 'package:cloud_firestore/cloud_firestore.dart';
+// import 'package:firebase_auth/firebase_auth.dart';
+// import 'package:flutter/material.dart';
+// import 'package:intl/intl.dart';
+// import 'package:recette_app/Service/Auth_Service.dart';
+// import 'package:recette_app/pages/Enregistrements/enregistre_recette.dart';
+// import 'package:recette_app/pages/Enregistrements/transition.dart';
+// import 'package:recette_app/pages/Home.dart';
+// import 'package:recette_app/pages/HomePage.dart';
+// import 'package:recette_app/pages/MenuPage.dart';
+// import 'package:intl/date_symbol_data_local.dart';
+// import 'package:fluttertoast/fluttertoast.dart';
+// import 'package:recette_app/model/user_model.dart';
+
+// class AddTodoD extends StatefulWidget {
+//   const AddTodoD({Key? key}) : super(key: key);
+
+//   @override
+//   _AddTodoDState createState() => _AddTodoDState();
+// }
+
+// class _AddTodoDState extends State<AddTodoD> {
+//   String dropdownvalue = 'Salaire';
+//   String? value;
+//   final _formKey = GlobalKey<FormState>();
+//   var selectedDepense;
+//   TextEditingController dateinput = TextEditingController();
+
+//   final TextEditingController _dateController = TextEditingController();
+
+//   final TextEditingController _smeController = TextEditingController();
+//   int espece_val = 0;
+//   int theorique_val = 0;
+
+//   final Stream<QuerySnapshot> _stream =
+//       FirebaseFirestore.instance.collection("ObjetDepense").snapshots();
+
+//   AuthClass authClass = AuthClass();
+//   User? user = FirebaseAuth.instance.currentUser;
+//   UserModel loggedInUser = UserModel();
+
+//   Widget numberItem(String labelText, TextEditingController controller) {
+//     return InkWell(
+//       child: Container(
+//           width: MediaQuery.of(context).size.width - 70,
+//           height: 55,
+//           child: TextFormField(
+//             keyboardType: TextInputType.number,
+//             controller: controller,
+//             style: const TextStyle(fontSize: 17, color: Colors.black),
+//             decoration: InputDecoration(
+//                 icon: Icon(Icons.account_balance_wallet_outlined),
+//                 labelText: labelText,
+//                 labelStyle: const TextStyle(fontSize: 17, color: Colors.black),
+//                 focusedBorder: OutlineInputBorder(
+//                   borderRadius: BorderRadius.circular(15),
+//                   borderSide: const BorderSide(width: 1.5, color: Colors.blue),
+//                 ),
+//                 enabledBorder: OutlineInputBorder(
+//                     borderRadius: BorderRadius.circular(15),
+//                     borderSide:
+//                         const BorderSide(width: 1, color: Colors.grey))),
+//           )),
+//     );
+//   }
+
+//   Widget textDate() {
+//     return Container(
+//       width: MediaQuery.of(context).size.width - 70,
+//       height: 55,
+//       child: TextField(
+//         onTap: () async {
+//           DateTime? choix = await showDatePicker(
+//               context: context,
+//               initialDate: DateTime.now(),
+//               firstDate: DateTime(2021),
+//               lastDate: DateTime.now());
+
+//           if (choix != null) {
+//             // 'fr_FR' DateFormat.yMMMMd('en_US')
+//             String formattedDate_affichage =
+//                 DateFormat.yMMMMd('fr_FR').format(choix);
+//             String formattedDate = DateFormat('dd-MM-yyyy').format(choix);
+//             print(formattedDate);
+//             // var difference = DateTime.now();
+//             // print(difference);
+//             setState(() {
+//               dateinput.text =
+//                   formattedDate_affichage; //set output date to TextField value.
+//             });
+//           } else {
+//             print('Date non selectionnée');
+//           }
+//         },
+//         readOnly: true,
+//         controller: dateinput,
+//         obscureText: false,
+//         style: const TextStyle(fontSize: 17, color: Colors.black),
+//         decoration: InputDecoration(
+//             icon: Icon(Icons.date_range),
+//             labelText: 'Selectionner la date',
+//             labelStyle: const TextStyle(fontSize: 17, color: Colors.black),
+//             focusedBorder: OutlineInputBorder(
+//                 borderRadius: BorderRadius.circular(15),
+//                 borderSide: const BorderSide(width: 1.5, color: Colors.blue)),
+//             enabledBorder: OutlineInputBorder(
+//                 borderRadius: BorderRadius.circular(15),
+//                 borderSide: const BorderSide(width: 1, color: Colors.grey))),
+//       ),
+//     );
+//   }
+
+//   void _refresh() {
+//     setState(() {
+//       dateinput.text = "";
+//       _smeController.text = "";
+//     });
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     void showToast() => Fluttertoast.showToast(
+//           msg: "Formulaire rafréchit",
+//           fontSize: 18,
+//           gravity: ToastGravity.BOTTOM,
+//         );
+
+//     void showToastAsync() async {
+//       await Fluttertoast.showToast(
+//         msg: "Dépenses enregistrer",
+//         fontSize: 18,
+//         gravity: ToastGravity.BOTTOM,
+//       );
+//       Navigator.of(context)
+//           .push(MaterialPageRoute(builder: (context) => HomePage()));
+//     }
+
+//     return GestureDetector(
+//       onTap: (() => FocusScope.of(context).requestFocus(FocusNode())),
+//       child: Scaffold(
+//           appBar: AppBar(
+//             leading: IconButton(
+//               icon: Icon(Icons.arrow_back_ios_new_outlined),
+//               tooltip: 'Retour Icon',
+//               onPressed: () {
+//                 Navigator.of(context).push(
+//                     MaterialPageRoute(builder: (context) => Transition()));
+//               },
+//             ),
+//             elevation: 2.0,
+//             backgroundColor: Colors.blue,
+//             centerTitle: true,
+//             title: InkWell(
+//               onTap: () {
+//                 Navigator.push(context,
+//                     MaterialPageRoute(builder: (context) => const HomePage()));
+//               },
+//               child: const Text(
+//                 'Mes dépenses ',
+//               ),
+//             ),
+//             actions: [
+//               InkWell(
+//                 onTap: () {
+//                   setState(() {
+//                     espece_val = int.parse(_smeController.text);
+//                     // theorique_val = int.parse(_siController.text);
+//                   });
+//                   // FirebaseFirestore.instance.collection("Recette").add({
+//                   //   "Date": dateinput.text,
+//                   //   "Id_user": loggedInUser.uid,
+//                   //   "Recette espece": espece_val,
+//                   //   "Recette site": theorique_val,
+//                   // });
+//                   print("enregistrer");
+//                   showToastAsync();
+//                 },
+//                 child: IconButton(
+//                     icon: Icon(Icons.done, color: Colors.white),
+//                     onPressed: null),
+//               ),
+//               InkWell(
+//                 onTap: () {
+//                   _refresh();
+//                   showToast();
+//                   print("rafrechis");
+//                 },
+//                 child: Container(
+//                   child: IconButton(
+//                       icon: Icon(Icons.refresh, color: Colors.white),
+//                       onPressed: null),
+//                 ),
+//               ),
+//             ],
+//           ),
+//           body: SingleChildScrollView(
+//             child: Form(
+//               key: _formKey,
+//               child: Container(
+//                 decoration: BoxDecoration(color: Colors.blue[50]),
+//                 width: MediaQuery.of(context).size.width,
+//                 height: MediaQuery.of(context).size.height,
+//                 child: Card(
+//                   margin: const EdgeInsets.fromLTRB(25, 20, 25, 200),
+//                   color: Colors.white,
+//                   shadowColor: Colors.blueGrey,
+//                   elevation: 3,
+//                   shape: const RoundedRectangleBorder(
+//                       // side: BorderSide(color: Colors.green, width: 3),
+//                       borderRadius: BorderRadius.all(Radius.circular(10))),
+//                   child: Center(
+//                     child: Column(
+//                       crossAxisAlignment: CrossAxisAlignment.center,
+//                       children: [
+//                         SizedBox(
+//                           height: 30,
+//                         ),
+//                         Container(
+//                           child: Row(
+//                             children: [
+//                               Expanded(
+//                                   child: Container(
+//                                 height: 1,
+//                                 color: Colors.grey,
+//                                 margin: EdgeInsets.symmetric(horizontal: 20),
+//                               )),
+//                               Text(
+//                                 "Date du jour",
+//                                 style: TextStyle(
+//                                     fontSize: 16, color: Colors.black),
+//                               ),
+//                               Expanded(
+//                                   child: Container(
+//                                 height: 1,
+//                                 color: Colors.grey,
+//                                 margin: EdgeInsets.symmetric(horizontal: 20),
+//                               )),
+//                             ],
+//                           ),
+//                         ),
+//                         SizedBox(
+//                           height: 20,
+//                         ),
+//                         textDate(),
+//                         SizedBox(
+//                           height: 20,
+//                         ),
+//                         Container(
+//                           child: Row(
+//                             children: [
+//                               Expanded(
+//                                   child: Container(
+//                                 height: 1,
+//                                 color: Colors.grey,
+//                                 margin: EdgeInsets.symmetric(horizontal: 20),
+//                               )),
+//                               Text(
+//                                 "Type de dépenses",
+//                                 style: TextStyle(
+//                                     fontSize: 16, color: Colors.black),
+//                               ),
+//                               Expanded(
+//                                   child: Container(
+//                                 height: 1,
+//                                 color: Colors.grey,
+//                                 margin: EdgeInsets.symmetric(horizontal: 20),
+//                               )),
+//                             ],
+//                           ),
+//                         ),
+//                         SizedBox(
+//                           height: 20,
+//                         ),
+//                         // Container(
+//                         //   width: MediaQuery.of(context).size.width - 70,
+//                         //   padding:
+//                         //       EdgeInsets.symmetric(horizontal: 20, vertical: 2),
+//                         //   decoration: BoxDecoration(
+//                         //       borderRadius: BorderRadius.circular(12),
+//                         //       border: Border.all(color: Colors.grey)),
+//                         //       // _stream
+//                         //   child:
+//                         // ),
+//                         StreamBuilder<QuerySnapshot>(
+//                             stream: _stream,
+//                             builder: (context, snapshot) {
+//                               if (!snapshot.hasData) {
+//                                 Text("Chargement...");
+//                               } else {
+//                                 List<DropdownMenuItem> depenseItems = [];
+//                                 for (int i = 0;
+//                                     i < snapshot.data.length;
+//                                     i++) {
+//                                   DocumentSnapshot snap =
+//                                       snapshot.data.docs[i];
+//                                   depenseItems.add(DropdownMenuItem(
+//                                     child: Text(snap.documentID),
+//                                     value: "${snap.documentID}",
+//                                   ));
+//                                 }
+//                               }
+//                               return Row(
+//                                 children: <Widget>[
+//                                   DropdownButton(
+//                                       items: depenseItems,
+//                                       value: selectedDepense,
+//                                       isExpanded: false,
+//                                       onChanged: (depenseValue) {
+//                                         final snackBar = SnackBar(
+//                                             content: Text("$depenseValue"));
+//                                         Scaffold.of(context)
+//                                             .showSnackBar(snackBar);
+//                                         setState(() {
+//                                           selectedDepense = depenseValue;
+//                                         });
+//                                       })
+//                                 ],
+//                               );
+//                             }),
+//                         SizedBox(
+//                           height: 20,
+//                         ),
+//                         Container(
+//                           child: Row(
+//                             children: [
+//                               Expanded(
+//                                   child: Container(
+//                                 height: 1,
+//                                 color: Colors.grey,
+//                                 margin: EdgeInsets.symmetric(horizontal: 20),
+//                               )),
+//                               Text(
+//                                 "Coût",
+//                                 style: TextStyle(
+//                                     fontSize: 16, color: Colors.black),
+//                               ),
+//                               Expanded(
+//                                   child: Container(
+//                                 height: 1,
+//                                 color: Colors.grey,
+//                                 margin: EdgeInsets.symmetric(horizontal: 20),
+//                               )),
+//                             ],
+//                           ),
+//                         ),
+//                         SizedBox(
+//                           height: 20,
+//                         ),
+//                         numberItem(
+//                             "Entrer le coût de la dépense", _smeController),
+//                       ],
+//                     ),
+//                   ),
+//                 ),
+//               ),
+//             ),
+//           )),
+//     );
+//   }
+// }
